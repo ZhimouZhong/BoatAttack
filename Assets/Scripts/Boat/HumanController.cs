@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Diagnostics;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace BoatAttack
@@ -18,17 +19,29 @@ namespace BoatAttack
         private void Awake()
         {
             _controls = new InputControls();
-            
-            _controls.BoatControls.Trottle.performed += context => _throttle = context.ReadValue<float>();
+
+            _controls.BoatControls.Trottle.performed += Trottle_performed;
             _controls.BoatControls.Trottle.canceled += context => _throttle = 0f;
-            
-            _controls.BoatControls.Steering.performed += context => _steering = context.ReadValue<float>();
+
+            _controls.BoatControls.Steering.performed += Steering_performed;
             _controls.BoatControls.Steering.canceled += context => _steering = 0f;
 
             _controls.BoatControls.Reset.performed += ResetBoat;
             _controls.BoatControls.Pause.performed += FreezeBoat;
 
             _controls.DebugControls.TimeOfDay.performed += SelectTime;
+        }
+
+        private void Steering_performed(InputAction.CallbackContext obj)
+        {
+            _steering = obj.ReadValue<float>();
+            UnityEngine.Debug.Log("_steering :" + _steering);
+        }
+
+        private void Trottle_performed(InputAction.CallbackContext obj)
+        {
+            _throttle = obj.ReadValue<float>();
+            UnityEngine.Debug.Log("_throttle :" + _throttle);
         }
 
         public override void OnEnable()
@@ -63,7 +76,7 @@ namespace BoatAttack
         private void SelectTime(InputAction.CallbackContext context)
         {
             var value = context.ReadValue<float>();
-            Debug.Log($"changing day time, input:{value}");
+            UnityEngine.Debug.Log($"changing day time, input:{value}");
             DayNightController.SelectPreset(value);
         }
 

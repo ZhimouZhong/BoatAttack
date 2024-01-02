@@ -301,7 +301,7 @@ namespace BoatAttack
 
         public static string GetLevelName(int level)
         {
-            return $"scenes/_levels/level_{Levels[level]}";
+            return $"Assets/scenes/_levels/level_{Levels[level]}.unity";
         }
 
         public static readonly string[] AiNames =
